@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+*.egg-info/
+dist/
+vosk-model-es-0.42/
+vosk-model-small-es-0.42/
+*.wav
+*.mp3
+*.ogg
+users.json

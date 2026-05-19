@@ -1,0 +1,40 @@
+29.1.2026
+1. New function procesar_pregunta_escrita - Handles written questions and processes them through the same pipeline as voice questions
+2. Input field for typing questions - Added a TextField where users can type their questions
+3. Assistant selection dropdown - Allows users to choose which assistant (Camilo, Luna, or Gael) to interact with
+4. Send button - An icon button to submit the written question
+5. Updated status text - Now mentions both voice and text input options
+6. Integrated input area - Added between the agents panel and bottom bar with proper styling
+The new functionality:
+- Users can now type questions in the text field
+- Select which assistant they want to talk to
+- Press Enter or click the Send button to submit
+- The question appears in the chat as a user message
+- The selected assistant responds as before
+- Voice commands still work alongside the text input
+
+Audio Speed Adjustments:
+1. Modified reproducir_audio_mp3_con_callback function:
+   - Added velocidad=0.85 parameter (15% slower than original)
+   - Added ffmpeg support to slow down audio using atempo filter
+   - Falls back to original audio if ffmpeg isn't available
+   - Properly cleans up temporary files
+2. Enhanced texto_a_voz_progresivo function:
+   - Increased text display timing from 0.05s to 0.06s per character (20% slower)
+   - Added adaptive timing based on text length:
+     - Textos >100 chars: 0.05s per char
+     - Textos 50-100 chars: 0.055s per char  
+     - Textos <50 chars: 0.06s per char
+   - Calls audio playback with velocidad=0.85
+Key Features:
+- 15% slower audio using ffmpeg's atempo filter
+- 20% slower text display for better synchronization
+- Adaptive timing based on text length
+- Fallback support if ffmpeg isn't installed
+- Cross-platform compatibility (Linux, Windows, macOS)
+The audio and text should now be much better synchronized. The audio plays at 85% speed while the text displays slightly slower, creating a more natural reading experience where users can follow along with the spoken words.
+
+
+
+
+

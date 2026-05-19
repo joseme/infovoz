@@ -1,0 +1,29 @@
+Instalación
+Para uso normal:
+bash
+
+pip install -r requirements.txt
+
+Para desarrollo:
+bash
+
+pip install -r requirements-dev.txt
+
+Para versión mínima:
+bash
+
+pip install -r requirements-minimal.txt
+
+Con extras:
+bash
+
+# Con características premium
+pip install ".[premium]"
+
+# Para desarrollo
+pip install ".[dev]"
+
+# Para web
+pip install ".[web]"
+
+
