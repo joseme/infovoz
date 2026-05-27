@@ -1,0 +1,22 @@
+services:
+  infovoz:
+    build: .
+    container_name: infovoz
+    ports:
+      - "8550:8550"
+    environment:
+      - FLET_WEB=true
+      - ANYTHING_KEY=${ANYTHING_KEY:-K3NPNJH-ZN0MNQD-QRS7Y06-SNRT2JC}
+      - ANYTHING_URL=${ANYTHING_URL:-https://any.knowhub.tech}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-AIzaSyBFhf_FVcEcNDk3xSBmVezLnpNkPRMbvxw}
+    volumes:
+      - infovoz_data:/app/data
+      - /dev/snd:/dev/snd:ro
+    devices:
+      - "/dev/snd:/dev/snd"
+    group_add:
+      - audio
+    restart: unless-stopped
+
+volumes:
+  infovoz_data:

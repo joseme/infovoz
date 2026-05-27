@@ -12,14 +12,18 @@ import asyncio
 import subprocess
 import platform
 import re
+import os
+from dotenv import load_dotenv
 from concurrent.futures import ThreadPoolExecutor
 from typing import List, Optional
+
+load_dotenv()
 
 # Queue para actualizaciones de UI seguras
 ui_queue: queue.Queue = queue.Queue()
 
 # --- CONFIGURACIÓN DE VOSK ---
-rutModel = r"/home/jose/desarrollo/voz_a_texto/vosk-model-small-es-0.42"
+rutModel = os.getenv("VOSK_MODEL_PATH", r"/home/jose/desarrollo/voz_a_texto/vosk-model-small-es-0.42")
 try:
     model = vosk.Model(rutModel)
 except Exception as e:
@@ -46,19 +50,17 @@ USUARIOS_VALIDOS = {
 }
 
 # --- CONFIGURACIÓN DE APIS ---
-ANYTHING_KEY = "K3NPNJH-ZN0MNQD-QRS7Y06-SNRT2JC" # Contabo
-# ANYTHING_KEY = "6PMHPDD-XAQMBG5-Q4S5EQT-6JFHZKR"
-ANYTHING_URL = "https://any.knowhub.tech"
-# ANYTHING_URL = "http://localhost:3051"
-GOOGLE_API_KEY = "AIzaSyBFhf_FVcEcNDk3xSBmVezLnpNkPRMbvxw"
+ANYTHING_KEY = os.getenv("ANYTHING_KEY", "")
+ANYTHING_URL = os.getenv("ANYTHING_URL", "https://any.knowhub.tech")
+GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY", "")
 
 # --- AUTENTICACIÓN ---
-import os
+def _ruta_usuarios():
+    return os.getenv("USERS_FILE", os.path.join(os.path.dirname(__file__), "users.json"))
 
 def cargar_usuarios():
-    """Carga usuarios desde archivo JSON"""
     try:
-        ruta_usuarios = os.path.join(os.path.dirname(__file__), "users.json")
+        ruta_usuarios = _ruta_usuarios()
         with open(ruta_usuarios, 'r', encoding='utf-8') as f:
             datos = json.load(f)
             return {user['usuario']: user for user in datos['usuarios']}
@@ -67,9 +69,8 @@ def cargar_usuarios():
         return {}
 
 def guardar_usuarios(usuarios_dict):
-    """Guarda usuarios en archivo JSON"""
     try:
-        ruta_usuarios = os.path.join(os.path.dirname(__file__), "users.json")
+        ruta_usuarios = _ruta_usuarios()
         datos = {"usuarios": list(usuarios_dict.values())}
         with open(ruta_usuarios, 'w', encoding='utf-8') as f:
             json.dump(datos, f, indent=2, ensure_ascii=False)
@@ -1290,7 +1291,8 @@ if __name__ == "__main__":
         print("✅ Audio configurado correctamente")
 
         # Iniciar aplicación Flet con login
-        ft.app(target=login, view=ft.AppView.FLET_APP, port=8550)
+        view_mode = ft.AppView.WEB_BROWSER if os.getenv("FLET_WEB") else ft.AppView.FLET_APP
+        ft.app(target=login, view=view_mode, port=8550)
 
     except Exception as e:
         print(f"❌ Error inicial: {e}")
