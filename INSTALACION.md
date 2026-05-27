@@ -35,6 +35,8 @@ No requiere dependencias adicionales del sistema.
 ### 1.2 Clonar el repositorio
 
 ```bash
+sudo mkdir -p /opt/infovoz
+sudo chown $USER:$USER /opt/infovoz
 git clone https://github.com/joseme/infovoz.git
 cd infovoz
 ```
